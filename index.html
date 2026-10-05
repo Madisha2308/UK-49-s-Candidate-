@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="UK49s Network — Number Follow-Up System for Lunch, Tea, Bonuses and Candidates.">
+<title>UK49s Network — Number Follow-Up System</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #0f172a;
+  --panel: #111c33;
+  --panel-2: #1e293b;
+  --panel-3: #17223a;
+  --text: #f8fafc;
+  --muted: #aab7cc;
+  --border: #334155;
+  --gold: #fbbf24;
+  --green: #10b981;
+  --red: #ef4444;
+  --blue: #60a5fa;
+  --shadow: 0 12px 35px rgba(0,0,0,.22);
+  --radius: 18px;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #eef2ff;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --panel-3: #f8fafc;
+    --text: #0f172a;
+    --muted: #526072;
+    --border: #cbd5e1;
+    --shadow: 0 10px 30px rgba(15,23,42,.10);
+  }
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+.root { min-height: 100vh; background: var(--bg); }
+.container { width: min(1240px, calc(100% - 28px)); margin: 0 auto; padding: 24px 0 60px; }
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; margin-bottom: 20px; }
+.brand { display: flex; align-items: center; gap: 16px; }
+.logo { width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #223352 0 27%, #16243e 28% 60%, #0f172a 61%); border: 2px solid var(--gold); box-shadow: 0 0 0 4px rgba(251,191,36,.10), var(--shadow); flex: 0 0 auto; }
+.logo span { font-weight: 900; font-size: 25px; letter-spacing: -2px; color: var(--gold); }
+h1 { margin: 0; font-size: clamp(27px, 4vw, 42px); letter-spacing: -.04em; line-height: 1.05; }
+.subtitle { margin: 7px 0 0; color: var(--muted); font-size: 15px; }
+.header-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.col-12 { grid-column: span 12; } .col-8 { grid-column: span 8; } .col-6 { grid-column: span 6; } .col-4 { grid-column: span 4; } .col-3 { grid-column: span 3; }
+.section-title { font-size: 18px; font-weight: 800; margin: 0 0 6px; }
+.section-note { margin: 0 0 15px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+label { display: block; color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+input, select, textarea { width: 100%; border: 1px solid var(--border); border-radius: 12px; background: var(--panel-2); color: var(--text); padding: 11px 12px; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(251,191,36,.13); }
+textarea { min-height: 135px; resize: vertical; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--border); background: var(--panel-2); color: var(--text); padding: 10px 13px; border-radius: 11px; font-weight: 800; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--gold); color: #111827; border-color: #f59e0b; }
+.btn-green { background: var(--green); color: #06251c; border-color: #059669; }
+.btn-danger { background: transparent; color: #fecaca; border-color: rgba(239,68,68,.45); }
+.badges { display: flex; gap: 7px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); background: var(--panel-3); padding: 6px 9px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.badge strong { color: var(--gold); }
+.numbers { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.metric-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.metric { background: var(--panel-2); border: 1px solid var(--border); border-radius: 13px; padding: 11px; }
+.metric small { display: block; color: var(--muted); font-size: 11px; font-weight: 700; }
+.metric b { display: block; margin-top: 6px; font-size: 20px; }
+.candidate-wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
+.candidate-list { display: flex; gap: 7px; flex-wrap: wrap; max-height: 280px; overflow: auto; padding-right: 4px; }
+.ball { min-width: 42px; height: 42px; padding: 0 8px; border-radius: 50%; display: inline-grid; place-items: center; border: 1px solid var(--border); background: var(--panel-2); font-size: 13px; font-weight: 900; }
+.ball.top { border-color: rgba(251,191,36,.75); box-shadow: inset 0 0 0 2px rgba(251,191,36,.08); }
+.ball.hot { border-color: rgba(16,185,129,.72); }
+.table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.table th, .table td { border-bottom: 1px solid var(--border); padding: 8px 6px; text-align: left; }
+.table th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.table-wrap { overflow: auto; max-height: 410px; border: 1px solid var(--border); border-radius: 14px; }
+.lines { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+.line { background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.line small { color: var(--muted); white-space: nowrap; }
+.line strong { font-size: 14px; letter-spacing: .02em; }
+.status { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 12px; }
+.footer { margin-top: 22px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.footer strong { color: var(--text); }
+.kicker { color: var(--green); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .10em; margin-bottom: 6px; }
+.hr { height: 1px; background: var(--border); margin: 15px 0; }
+.tiny { font-size: 11px; color: var(--muted); }
+@media (max-width: 950px) {
+  .col-8, .col-6, .col-4, .col-3 { grid-column: span 12; }
+  .candidate-wrap { grid-template-columns: 1fr; }
+  .metric-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 620px) {
+  .container { width: min(100% - 16px, 1240px); padding-top: 12px; }
+  .hero { grid-template-columns: 1fr; }
+  .header-actions { justify-content: flex-start; }
+  .numbers { grid-template-columns: repeat(3, 1fr); }
+  .metric-grid { grid-template-columns: repeat(2, 1fr); }
+  .lines { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="root">
+<div class="container">
+  <header class="hero">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><span>49</span></div>
+      <div>
+        <div class="kicker">Number Follow-Up System</div>
+        <h1>UK49s Network</h1>
+        <p class="subtitle">Lunch • Tea • Bonuses • Candidates • Follow-Up Network</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="exportJson">Export Session</button>
+      <button class="btn" id="resetAll">Reset</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="panel col-8">
+      <h2 class="section-title">Draw input</h2>
+      <p class="section-note">Enter the draw you want to analyse. The engine combines the supplied draw with any stored history and the configurable follow-up rules.</p>
+      <div class="grid">
+        <div class="col-4"><label for="drawDate">Date</label><input id="drawDate" type="date"></div>
+        <div class="col-4"><label for="drawType">Draw</label><select id="drawType"><option>LunchTime</option><option>TeaTime</option><option>BrunchTime</option><option>DriveTime</option></select></div>
+        <div class="col-4"><label for="bonus">7th / bonus</label><input id="bonus" type="number" min="1" max="49" placeholder="e.g. 29"></div>
+        <div class="col-12">
+          <label>Six main numbers</label>
+          <div class="numbers">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N1">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N2">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N3">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N4">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N5">
+            <input class="main-number" type="number" min="1" max="49" placeholder="N6">
+          </div>
+        </div>
+        <div class="col-12 row">
+          <button class="btn btn-primary" id="runAnalysis">Generate Candidates</button>
+          <button class="btn btn-green" id="saveDraw">Save Draw + Generate</button>
+          <span class="tiny">Tip: keep draw order exactly as published when testing ordered relationships.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel col-4">
+      <h2 class="section-title">Engine controls</h2>
+      <p class="section-note">Weights are editable so you can test your own network without changing the code.</p>
+      <div class="grid">
+        <div class="col-6"><label for="ucCode">Universal Code</label><input id="ucCode" value="1372" inputmode="numeric"></div>
+        <div class="col-6"><label for="lineCount">Lines</label><input id="lineCount" type="number" min="1" max="200" value="50"></div>
+        <div class="col-6"><label for="wBase">Base hits</label><input id="wBase" type="number" value="4"></div>
+        <div class="col-6"><label for="wFollow">Follow-up</label><input id="wFollow" type="number" value="3"></div>
+        <div class="col-6"><label for="wFamily">Family</label><input id="wFamily" type="number" value="2"></div>
+        <div class="col-6"><label for="wAdj">Adjacency</label><input id="wAdj" type="number" value="2"></div>
+        <div class="col-6"><label for="wBonus">Bonus</label><input id="wBonus" type="number" value="3"></div>
+        <div class="col-6"><label for="wHistory">History</label><input id="wHistory" type="number" value="2"></div>
+      </div>
+      <div class="hr"></div>
+      <div class="badges">
+        <span class="badge">Banker anchors <strong>13</strong></span>
+        <span class="badge">Banker anchors <strong>49</strong></span>
+        <span class="badge">Dual role <strong>31</strong></span>
+      </div>
+    </section>
+
+    <section class="panel col-12">
+      <h2 class="section-title">Calculation dashboard</h2>
+      <p class="section-note">These are transparent rule outputs, not guaranteed forecasts. Use them to inspect relationships and compare against actual subsequent draws.</p>
+      <div class="metric-grid" id="metrics"></div>
+      <div class="hr"></div>
+      <div id="calcBadges" class="badges"></div>
+    </section>
+
+    <section class="panel col-7">
+      <h2 class="section-title">Candidate network</h2>
+      <p class="section-note">Candidates are scored from direct calculations, follow-up numbers, families, adjacent numbers, bonus transforms and historical frequency.</p>
+      <div class="candidate-wrap">
+        <div>
+          <div id="candidateList" class="candidate-list"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>#</th><th>Number</th><th>Score</th><th>Why</th></tr></thead>
+            <tbody id="candidateTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel col-5">
+      <h2 class="section-title">50-line reducer</h2>
+      <p class="section-note">The reducer creates distinct six-number lines from the ranked candidate pool while balancing score, spread and coverage.</p>
+      <div class="row" style="margin-bottom:10px">
+        <button class="btn btn-primary" id="copyLines">Copy Lines</button>
+        <button class="btn" id="downloadLines">Download TXT</button>
+      </div>
+      <div id="lines" class="lines"></div>
+    </section>
+
+    <section class="panel col-12">
+      <h2 class="section-title">Historical draws & backtest</h2>
+      <p class="section-note">Paste CSV with columns <strong>date,draw,n1,n2,n3,n4,n5,n6,bonus</strong>. For the 50/100-draw test, the app walks each historical row, generates candidates from prior rows only, and counts matches in the following six-number draw.</p>
+      <div class="row" style="margin-bottom:10px">
+        <button class="btn" id="loadSample">Load Sample History</button>
+        <button class="btn" id="clearHistory">Clear History</button>
+        <button class="btn btn-green" id="runBacktest">Run Backtest</button>
+        <label style="display:inline-flex;align-items:center;gap:7px;margin:0 0 0 4px"><input id="btWindow" type="number" min="1" max="1000" value="100" style="width:88px"> rows</label>
+      </div>
+      <textarea id="historyCsv" placeholder="date,draw,n1,n2,n3,n4,n5,n6,bonus\n2026-10-04,LunchTime,23,27,30,31,40,44,29"></textarea>
+      <div class="status" id="status"></div>
+      <div class="metric-grid" id="btMetrics"></div>
+      <div class="table-wrap" style="margin-top:12px">
+        <table class="table"><thead><tr><th>Date</th><th>Draw</th><th>Predicted pool</th><th>Actual</th><th>Hits</th><th>Bonus hit</th><th>Top calculations</th></tr></thead><tbody id="btTable"></tbody></table>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer"><strong>UK49s Network</strong> is a local, deterministic research tool. It does not connect to a live lottery feed unless you add one yourself. Number generation is experimental and cannot establish future outcomes.</div>
+</div>
+</div>
+
+<script>
+const state = {
+  history: [],
+  candidates: [],
+  lines: [],
+  calcs: {}
+};
+
+const $ = (id) => document.getElementById(id);
+const mainInputs = [...document.querySelectorAll('.main-number')];
+
+const SAMPLE_CSV = `date,draw,n1,n2,n3,n4,n5,n6,bonus
+2026-09-28,LunchTime,8,9,15,18,20,35,16
+2026-09-29,TeaTime,10,13,27,28,41,44,3
+2026-09-30,LunchTime,38,3,48,25,11,14,7
+2026-09-30,TeaTime,44,7,1,27,19,14,37
+2026-10-01,LunchTime,1,3,10,27,28,33,46
+2026-10-01,TeaTime,6,12,16,29,37,45,49
+2026-10-02,LunchTime,7,10,16,40,47,48,19
+2026-10-03,BrunchTime,7,12,45,46,48,49,47
+2026-10-03,LunchTime,5,11,20,27,42,47,31
+2026-10-03,TeaTime,8,14,16,25,36,43,35
+2026-10-04,LunchTime,23,27,30,31,40,44,29`;
+
+function nums(v) { return Number(v); }
+function uniq(a) { return [...new Set(a)]; }
+function valid(n) { return Number.isInteger(n) && n >= 1 && n <= 49; }
+function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+function reduceDigits(n) {
+  let x = Math.abs(Math.trunc(n));
+  while (x > 9) x = String(x).split('').reduce((s,d)=>s + Number(d), 0);
+  return x || 9;
+}
+function normalize49(n) {
+  let x = Math.abs(Math.trunc(n));
+  if (x === 0) return 49;
+  while (x > 49) x -= 49;
+  return x;
+}
+function family(n) {
+  const unit = n % 10;
+  const a = [];
+  for (let x = unit || 10; x <= 49; x += 10) a.push(x);
+  if (unit === 0) a.push(10,20,30,40);
+  return uniq(a.filter(valid));
+}
+function spin(n) {
+  if (n < 10) return normalize49(n * 11);
+  const s = String(n).padStart(2,'0');
+  const rev = Number(s[1] + s[0]);
+  return rev > 49 ? normalize49(reduceDigits(rev)) : rev || 49;
+}
+function addFollow(map, source, why, weight) {
+  if (!valid(source)) return;
+  const variants = [source-1, source+1, source-5, source+5, source-6, source+6, source-7, source+7, spin(source)];
+  variants.forEach(n => { n = normalize49(n); if (valid(n)) bump(map,n,why,weight); });
+}
+function bump(map,n,why,weight) {
+  n = normalize49(n);
+  if (!valid(n)) return;
+  if (!map[n]) map[n] = {n, score:0, why:[]};
+  map[n].score += Number(weight) || 0;
+  if (why && !map[n].why.includes(why)) map[n].why.push(why);
+}
+function historyRows() {
+  return state.history.slice().sort((a,b)=> (a.date+a.draw).localeCompare(b.date+b.draw));
+}
+function parseCSV(text) {
+  const rows = [];
+  const lines = String(text || '').trim().split(/\r?\n/).filter(Boolean);
+  if (!lines.length) return rows;
+  const header = lines[0].split(',').map(x => x.trim().toLowerCase());
+  for (const line of lines.slice(1)) {
+    const p = line.split(',').map(x => x.trim());
+    const o = {};
+    header.forEach((h,i)=>o[h]=p[i]);
+    const ns = ['n1','n2','n3','n4','n5','n6'].map(k=>Number(o[k]));
+    if (!o.date || !o.draw || ns.some(x=>!valid(x))) continue;
+    const bonus = Number(o.bonus);
+    rows.push({date:o.date, draw:o.draw, nums:ns, bonus:valid(bonus)?bonus:null});
+  }
+  return rows;
+}
+function inputDraw() {
+  const ns = mainInputs.map(i=>Number(i.value));
+  return {date:$('drawDate').value || 'Unknown', draw:$('drawType').value, nums:ns, bonus:Number($('bonus').value)};
+}
+function computeCalculations(d, prior) {
+  const [n1,n2,n3,n4,n5,n6] = d.nums;
+  const sum = d.nums.reduce((a,b)=>a+b,0);
+  const div8 = sum / 8;
+  const code = `${n1}${n2}${n3}${n4}${n5}${n6}`.slice(0,3);
+  const codeNum = Number(code || 0);
+  const uc = ($('ucCode').value || '1372').replace(/\D/g,'') || '1372';
+  const ucNum = Number(uc);
+  const ucDig = reduceDigits(ucNum);
+  const sumDig = reduceDigits(sum);
+  const div8Round = clamp(Math.round(div8),1,49);
+  const div8Digit = reduceDigits(Math.round(div8));
+  const fifthSixth = n5 + n6;
+  const fifthSixthPlus55 = normalize49(fifthSixth + 55);
+  const fifthSixthX2 = normalize49(fifthSixth * 2);
+  const bonus = valid(d.bonus) ? d.bonus : null;
+  const prev = prior && prior.length ? prior[prior.length-1] : null;
+  const priorRows = (prior || []).slice();
+  const prevSameDraw = priorRows.filter(r => r.draw === d.draw);
+  const prevTyped = prevSameDraw.length ? prevSameDraw[prevSameDraw.length-1] : null;
+  const previousTea = priorRows.filter(r => r.draw === 'TeaTime' && r.bonus).slice(-1)[0] || null;
+  const secondLunch = d.draw === 'LunchTime' ? n2 : null;
+  let relation = null;
+  if (secondLunch && previousTea) {
+    relation = normalize49(Math.abs(secondLunch - previousTea.bonus) + 3);
+  }
+  let bonusVsTea = null;
+  if (bonus !== null && previousTea) bonusVsTea = normalize49(Math.abs(bonus - previousTea.bonus) + 3);
+  const abc = uniq(d.nums.flatMap(n=>[n-1,n+1])).filter(valid);
+  const base = uniq([sumDig, div8Round, div8Digit, ucDig, reduceDigits(codeNum), normalize49(codeNum), fifthSixth, fifthSixthPlus55, fifthSixthX2, relation, bonusVsTea, bonus, secondLunch, previousTea && previousTea.bonus].filter(valid));
+  return {sum,div8,div8Round,div8Digit,sumDig,code,uc,ucDig,fifthSixth,fifthSixthPlus55,fifthSixthX2,relation,bonusVsTea,abc,base,previousTea};
+}
+function scoreCandidates(d, calcs, hist) {
+  const weights = {
+    base:Number($('wBase').value)||4,
+    follow:Number($('wFollow').value)||3,
+    family:Number($('wFamily').value)||2,
+    adj:Number($('wAdj').value)||2,
+    bonus:Number($('wBonus').value)||3,
+    history:Number($('wHistory').value)||2
+  };
+  const map = {};
+  d.nums.forEach(n=>bump(map,n,'current draw',weights.base));
+  calcs.base.forEach(n=>bump(map,n,'calculation',weights.base));
+  calcs.base.forEach(n=>addFollow(map,n,'follow-up ±1/±5/±6/±7/spin',weights.follow));
+  calcs.base.forEach(n=>family(n).forEach(x=>bump(map,x,'family',weights.family)));
+  calcs.abc.forEach(n=>bump(map,n,'adjacent',weights.adj));
+  if (calcs.relation) {
+    bump(map,calcs.relation,'2nd Lunch − prior Tea bonus +3',weights.bonus);
+    addFollow(map,calcs.relation,'relation chain',weights.follow);
+  }
+  if (calcs.bonusVsTea) bump(map,calcs.bonusVsTea,'bonus − prior Tea bonus +3',weights.bonus);
+  if (valid(d.bonus)) {
+    [d.bonus+3,d.bonus+6,d.bonus+9,reduceDigits(d.bonus+3),spin(d.bonus)].forEach(n=>bump(map,n,'bonus transform',weights.bonus));
+  }
+  // Configurable banker anchors from the working UK49s Network rules.
+  [13,49,31].forEach(n=>bump(map,n,'banker anchor',1.5));
+  const freq = {};
+  hist.forEach(r=>r.nums.forEach(n=>freq[n]=(freq[n]||0)+1));
+  Object.keys(freq).forEach(k=>bump(map,Number(k),'historical frequency',weights.history * Math.log2(1+freq[k])));
+  // Encourage undropped/ABC companions around historical hits.
+  hist.slice(-12).forEach(r=>r.nums.forEach(n=>{
+    [n-1,n+1].filter(valid).forEach(x=>bump(map,x,'recent companion',0.75));
+  }));
+  return Object.values(map).map(o=>({...o,score:Math.round(o.score*100)/100})).sort((a,b)=>b.score-a.score || a.n-b.n);
+}
+function makeLines(candidates, count) {
+  const pool = candidates.slice(0, Math.max(18, Math.min(32,candidates.length))).map(x=>x.n);
+  const out = [];
+  const seen = new Set();
+  function addLine(arr){
+    arr = uniq(arr).filter(valid).sort((a,b)=>a-b);
+    if (arr.length !== 6) return;
+    const key = arr.join('-');
+    if (!seen.has(key)) { seen.add(key); out.push(arr); }
+  }
+  // Deterministic coverage: sliding combinations + score-spaced lines.
+  for (let i=0; i<pool.length && out.length<count*2; i++) {
+    const picks = [pool[i], pool[(i+3)%pool.length], pool[(i+7)%pool.length], pool[(i+11)%pool.length], pool[(i+15)%pool.length], pool[(i+19)%pool.length]];
+    addLine(picks);
+  }
+  for (let i=0; i<pool.length && out.length<count*2; i++) {
+    for (let j=i+1; j<pool.length && out.length<count*2; j++) {
+      const picks = [pool[i],pool[j],pool[(i+5)%pool.length],pool[(j+5)%pool.length],pool[(i+9)%pool.length],pool[(j+9)%pool.length]];
+      addLine(picks);
+    }
+  }
+  // Greedy diversify by number frequency in produced lines.
+  const freq = {};
+  while (out.length > count) out.pop();
+  const final=[]; const remain=out.slice();
+  while (final.length<count && remain.length) {
+    remain.sort((a,b)=> {
+      const sa=a.reduce((s,n)=>s+(freq[n]||0),0), sb=b.reduce((s,n)=>s+(freq[n]||0),0);
+      return sa-sb;
+    });
+    const line=remain.shift(); final.push(line); line.forEach(n=>freq[n]=(freq[n]||0)+1);
+  }
+  return final;
+}
+function fmtLine(line){ return line.map(n=>String(n).padStart(2,'0')).join(' - '); }
+function renderMetrics(c) {
+  const items=[
+    ['Six-number sum',c.sum],['Sum ÷ 8',c.div8.toFixed(2)],['Rounded ÷ 8',c.div8Round],['Digit-reduced sum',c.sumDig],['5th + 6th',c.fifthSixth],['5th + 6th + 55',c.fifthSixthPlus55],
+    ['(5th + 6th) × 2',c.fifthSixthX2],['UC digit',c.ucDig],['2nd Lunch ↔ Tea bonus',c.relation || '—'],['Bonus ↔ Tea bonus',c.bonusVsTea || '—'],['ABC companions',c.abc.length],['Base seeds',c.base.length]
+  ];
+  $('metrics').innerHTML=items.map(([k,v])=>`<div class="metric"><small>${k}</small><b>${v}</b></div>`).join('');
+  $('calcBadges').innerHTML = c.base.slice(0,12).map(n=>`<span class="badge">Seed <strong>${n}</strong></span>`).join('') || '<span class="tiny">Enter a valid draw to see calculation seeds.</span>';
+}
+function renderCandidates(candidates) {
+  state.candidates = candidates;
+  $('candidateList').innerHTML = candidates.slice(0,50).map((x,i)=>`<span class="ball ${i<10?'top':''} ${i<25?'hot':''}" title="${x.why.join('; ')}">${x.n}</span>`).join('');
+  $('candidateTable').innerHTML = candidates.slice(0,50).map((x,i)=>`<tr><td>${i+1}</td><td><strong>${x.n}</strong></td><td>${x.score}</td><td>${x.why.slice(0,3).join(' • ')}</td></tr>`).join('');
+}
+function renderLines(lines) {
+  state.lines = lines;
+  $('lines').innerHTML = lines.map((l,i)=>`<div class="line"><strong>${i+1}. ${fmtLine(l)}</strong><small>${l.reduce((a,b)=>a+b,0)}</small></div>`).join('') || '<div class="tiny">Generate candidates first.</div>';
+}
+function analyse(d, historyOverride=null) {
+  if (!d.nums.every(valid) || new Set(d.nums).size !== 6) {
+    $('status').textContent='Enter six unique main numbers from 1 to 49.';
+    return null;
+  }
+  if (!valid(d.bonus)) d.bonus=null;
+  const hist = historyOverride || historyRows();
+  const calcs = computeCalculations(d,hist.slice(-20));
+  const candidates = scoreCandidates(d,calcs,hist.filter(r=>r.date !== d.date || r.draw !== d.draw || r.nums.join(',') !== d.nums.join(',')));
+  const count=clamp(Number($('lineCount').value)||50,1,200);
+  const lines=makeLines(candidates,count);
+  state.calcs=calcs;
+  renderMetrics(calcs); renderCandidates(candidates); renderLines(lines);
+  $('status').textContent=`Generated ${candidates.length} ranked candidates and ${lines.length} distinct lines.`;
+  return {calcs,candidates,lines};
+}
+function saveHistory() {
+  const d=inputDraw();
+  if (!d.nums.every(valid) || new Set(d.nums).size!==6 || !valid(d.bonus)) {
+    $('status').textContent='Save requires six unique numbers and a valid bonus from 1 to 49.';
+    return false;
+  }
+  state.history.push(d);
+  const dedup={}; state.history.forEach(r=>dedup[`${r.date}|${r.draw}|${r.nums.join('-')}|${r.bonus}`]=r); state.history=Object.values(dedup);
+  persist();
+  analyse(d);
+  return true;
+}
+function persist(){ localStorage.setItem('uk49s-network-history',JSON.stringify(state.history)); }
+function restore(){
+  try { state.history=JSON.parse(localStorage.getItem('uk49s-network-history')||'[]') || []; } catch { state.history=[]; }
+  const csv=state.history.length ? toCSV(state.history) : SAMPLE_CSV;
+  $('historyCsv').value=csv;
+}
+function toCSV(rows){
+  return ['date,draw,n1,n2,n3,n4,n5,n6,bonus',...rows.map(r=>[r.date,r.draw,...r.nums,r.bonus??''].join(','))].join('\n');
+}
+function importHistory(){
+  state.history=parseCSV($('historyCsv').value); persist(); $('status').textContent=`Loaded ${state.history.length} historical draws.`;
+}
+function backtest(){
+  const rows=parseCSV($('historyCsv').value);
+  const window=Math.min(Number($('btWindow').value)||100, rows.length);
+  if (rows.length<2) { $('status').textContent='Add at least two historical draws for a backtest.'; return; }
+  const subset=rows.slice(Math.max(0,rows.length-window));
+  let totalMainHits=0, exactLineHits=0, bonusHits=0, tests=0; const detail=[];
+  for (let i=1;i<subset.length;i++) {
+    const actual=subset[i];
+    const prior=subset.slice(0,i);
+    const d=prior[prior.length-1];
+    const calcs=computeCalculations(d,prior.slice(-20));
+    const cands=scoreCandidates(d,calcs,prior);
+    const pool=new Set(cands.slice(0,24).map(x=>x.n));
+    const hits=actual.nums.filter(n=>pool.has(n));
+    const lines=makeLines(cands,50);
+    const lineHit=lines.some(l=>actual.nums.every(n=>l.includes(n)));
+    const bHit=valid(actual.bonus) && pool.has(actual.bonus);
+    totalMainHits += hits.length; exactLineHits += lineHit?1:0; bonusHits += bHit?1:0; tests++;
+    detail.push({date:actual.date,draw:actual.draw,pred:cands.slice(0,10).map(x=>x.n),actual:actual.nums,hits,bonusHit:bHit,calc:[calcs.relation,calcs.bonusVsTea,calcs.div8Round].filter(Boolean)});
+  }
+  $('btMetrics').innerHTML=[
+    ['Rows tested',tests],['Main hits in top 24',totalMainHits],['Avg main hits/test',(totalMainHits/tests).toFixed(2)],['Full-line hits',exactLineHits],['Bonus hits in top 24',bonusHits],['Full-line rate',((exactLineHits/tests)*100).toFixed(1)+'%']
+  ].map(([k,v])=>`<div class="metric"><small>${k}</small><b>${v}</b></div>`).join('');
+  $('btTable').innerHTML=detail.slice(-100).reverse().map(x=>`<tr><td>${x.date}</td><td>${x.draw}</td><td>${x.pred.join(', ')}</td><td>${x.actual.join(', ')}</td><td><strong>${x.hits.length}</strong>${x.hits.length?' ('+x.hits.join(', ')+')':''}</td><td>${x.bonusHit?'YES':'—'}</td><td>${x.calc.join(' / ')||'—'}</td></tr>`).join('');
+  $('status').textContent=`Backtest complete: ${tests} next-draw tests. Historical samples must be large enough to be meaningful; this tool does not imply predictive certainty.`;
+}
+function download(name, text, type='text/plain'){ const blob=new Blob([text],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href); }
+
+$('runAnalysis').addEventListener('click',()=>analyse(inputDraw()));
+$('saveDraw').addEventListener('click',saveHistory);
+$('loadSample').addEventListener('click',()=>{$('historyCsv').value=SAMPLE_CSV; importHistory();});
+$('clearHistory').addEventListener('click',()=>{state.history=[]; persist(); $('historyCsv').value='date,draw,n1,n2,n3,n4,n5,n6,bonus\n'; $('status').textContent='History cleared.';});
+$('runBacktest').addEventListener('click',()=>{importHistory(); backtest();});
+$('copyLines').addEventListener('click',async()=>{ const t=state.lines.map((l,i)=>`${i+1}. ${fmtLine(l)}`).join('\n'); try{await navigator.clipboard.writeText(t); $('status').textContent='50-line output copied.';}catch{$('status').textContent='Copy is unavailable in this browser; use Download TXT.';} });
+$('downloadLines').addEventListener('click',()=>download('uk49s-network-50-lines.txt',state.lines.map((l,i)=>`${i+1}. ${fmtLine(l)}`).join('\n')));
+$('exportJson').addEventListener('click',()=>download('uk49s-network-session.json',JSON.stringify({history:state.history,calcs:state.calcs,candidates:state.candidates,lines:state.lines},null,2),'application/json'));
+$('resetAll').addEventListener('click',()=>{ localStorage.removeItem('uk49s-network-history'); state.history=[]; state.candidates=[]; state.lines=[]; renderLines([]); $('historyCsv').value=SAMPLE_CSV; $('status').textContent='Session reset.'; });
+
+document.addEventListener('DOMContentLoaded',()=>{
+  $('drawDate').value=new Date().toISOString().slice(0,10);
+  restore();
+  // Load current stored/sample row into inputs as a convenient starting point.
+  const rows=parseCSV($('historyCsv').value);
+  if (rows.length) {
+    const r=rows[rows.length-1]; $('drawDate').value=r.date; $('drawType').value=r.draw; mainInputs.forEach((el,i)=>el.value=r.nums[i]); $('bonus').value=r.bonus ?? '';
+    analyse(r,rows.slice(0,-1));
+  }
+});
+</script>
+</body>
+</html>
